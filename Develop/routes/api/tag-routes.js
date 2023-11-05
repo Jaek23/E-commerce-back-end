@@ -7,10 +7,11 @@ router.get('/', async (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   try {
-    const allTags = await Category.findAll({include:[{model: Product}]});
+    const allTags = await Tag.findAll({include:[{model: Product, as:'description_product'}]});
     res.status(200).json(allTags);
   } catch(err) {
     res.status(500).json(err);
+    console.error(err)
   }
 });
 
@@ -18,7 +19,7 @@ router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
   try {
-    const specificTag = await Category.findByPk(req.params.id, { include: [{ model: Product }] })
+    const specificTag = await Tag.findByPk(req.params.id, { include: [{ model: Product }] })
     res.status(200).json(specificTag);
   } catch (err) {
     res.status(500).json(err);
@@ -28,7 +29,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new tag
   try {
-    const newTag = await Category.create(req.body);
+    const newTag = await Tag.create(req.body);
     res.status(200).json(newTag);
   } catch (err) {
     res.status(400).json(err);
